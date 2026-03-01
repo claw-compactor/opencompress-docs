@@ -1,0 +1,85 @@
+---
+title: "LangChain"
+description: "Use OpenCompress with LangChain for compressed agent and chain workflows."
+---
+
+## Python
+
+LangChain's `ChatOpenAI` class accepts a custom `base_url`, making integration seamless.
+
+```bash
+pip install langchain-openai
+```
+
+```python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+    model="gpt-4o",
+)
+
+response = llm.invoke("Explain the benefits of prompt compression.")
+print(response.content)
+```
+
+## With chains
+
+```python
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+    model="gpt-4o",
+)
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a technical writer. Be concise and clear."),
+    ("user", "Write documentation for: {topic}"),
+])
+
+chain = prompt | llm
+response = chain.invoke({"topic": "REST API authentication"})
+print(response.content)
+```
+
+## With agents
+
+```python
+from langchain_openai import ChatOpenAI
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.prompts import ChatPromptTemplate
+
+llm = ChatOpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+    model="gpt-4o",
+)
+
+# Your tools and agent setup work exactly the same
+# OpenCompress compresses the input before each LLM call
+```
+
+## TypeScript
+
+```typescript
+import { ChatOpenAI } from "@langchain/openai";
+
+const llm = new ChatOpenAI({
+  configuration: {
+    baseURL: "https://www.opencompress.ai/api/v1",
+  },
+  apiKey: "sk-occ-your-key-here",
+  model: "gpt-4o",
+});
+
+const response = await llm.invoke("Explain prompt compression.");
+console.log(response.content);
+```
+
+<Tip>
+  Agent workflows benefit the most from compression. System prompts, tool schemas, and conversation history all contain significant token waste that OpenCompress removes.
+</Tip>

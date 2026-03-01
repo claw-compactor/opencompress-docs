@@ -1,0 +1,30 @@
+---
+title: "Manage Balance"
+description: "Add funds and monitor your account balance."
+---
+
+## Add funds
+
+1. Go to [opencompress.ai/dashboard](https://www.opencompress.ai/dashboard)
+2. Click **Add Funds** in the balance section
+3. Choose a preset amount ($10, $50, $100, $500, $1,000) or enter a custom amount
+4. Complete payment via Stripe
+5. Balance is credited immediately
+
+## Check balance
+
+Your current balance is displayed at the top of the dashboard. It updates in real time as you make API calls.
+
+## Low balance
+
+When your balance reaches $0:
+- API requests return HTTP `402` with `"Insufficient balance"`
+- No data is lost — just add more funds and continue
+- In-flight streaming requests will complete (we don't cut off mid-stream)
+
+## Usage history
+
+The dashboard shows your complete usage history:
+- Per-request breakdown (model, tokens, savings, cost)
+- Monthly aggregates (total calls, tokens saved, money saved)
+- Compression rate trends over time

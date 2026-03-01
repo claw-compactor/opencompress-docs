@@ -1,0 +1,60 @@
+---
+title: "Pricing"
+description: "Pay only for what we save you. No savings, no fee."
+---
+
+## How pricing works
+
+OpenCompress uses a **pay-for-savings** model. We charge **20% of the money we save you**. If compression doesn't save you anything on a particular request, there's no additional fee.
+
+```
+Your cost = LLM cost (on compressed tokens) + 20% × savings
+```
+
+## Example
+
+Say you send a 10,000-token prompt that we compress to 6,000 tokens using GPT-4o ($2.50/1M input tokens):
+
+| | Tokens | Cost |
+|---|---|---|
+| Without OpenCompress | 10,000 input | $0.0250 |
+| With OpenCompress | 6,000 input | $0.0150 |
+| **Savings** | 4,000 tokens | **$0.0100** |
+| OpenCompress fee (20%) | | $0.0020 |
+| **Your total cost** | | **$0.0170** |
+| **Net savings** | | **$0.0080 (32%)** |
+
+You save **32%** on this call. We earn $0.002. Everyone wins.
+
+## Router vs BYOK pricing
+
+<CardGroup cols={2}>
+  <Card title="Router Mode" icon="route">
+    **You pay us:** LLM cost + 20% fee
+
+    We handle the LLM provider. Simple, no setup.
+  </Card>
+  <Card title="BYOK Mode" icon="key">
+    **You pay us:** 20% fee only
+
+    You pay your LLM provider directly. We only charge the compression fee.
+  </Card>
+</CardGroup>
+
+## Billing details
+
+- **Minimum deposit:** $10
+- **Deposit options:** $10, $50, $100, $500, $1,000, or custom amount
+- **Payment:** Stripe (credit card)
+- **Balance:** Prepaid, deducted per request
+- **Refunds:** Available for unused balance
+
+## Output savings
+
+When we compress your input, the model's output also tends to be shorter. We estimate output savings conservatively:
+
+```
+output_savings = input_compression_rate × 0.5
+```
+
+This means a 40% input compression results in an estimated 20% shorter output. Both input and output savings are factored into your total savings calculation.

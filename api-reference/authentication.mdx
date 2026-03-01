@@ -1,0 +1,49 @@
+---
+title: "Authentication"
+description: "How to authenticate with the OpenCompress API."
+---
+
+## API keys
+
+All API requests require authentication via a Bearer token in the `Authorization` header:
+
+```
+Authorization: Bearer sk-occ-your-key-here
+```
+
+API keys start with the prefix `sk-occ-` followed by a cryptographically random string.
+
+## Getting a key
+
+1. Sign in at [opencompress.ai/dashboard](https://www.opencompress.ai/dashboard)
+2. Navigate to the **API Keys** section
+3. Click **Create Key**
+4. Choose a mode (Router or BYOK)
+5. Copy the key immediately — **it's shown only once**
+
+## Key security
+
+<Warning>
+  Your API key is shown only once when created. Store it securely. If you lose it, revoke the old key and create a new one.
+</Warning>
+
+Best practices:
+- Store keys in environment variables, never in code
+- Use different keys for development and production
+- Revoke keys immediately if compromised
+- Each key has independent rate limits and usage tracking
+
+## Key modes
+
+| Mode | Description |
+|---|---|
+| **Router** | OpenCompress routes to the LLM via OpenRouter. You pay us for everything. |
+| **BYOK** | Bring your own LLM key. You pay your provider directly; we charge only the compression fee. |
+
+See [BYOK Mode](/features/byok-mode) for setup details.
+
+## Key management
+
+- **Maximum keys:** 5 active keys per account
+- **Revoke:** Delete a key in the dashboard. Takes effect immediately.
+- **Last used:** Dashboard shows when each key was last used

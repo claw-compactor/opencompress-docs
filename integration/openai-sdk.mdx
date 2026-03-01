@@ -1,0 +1,111 @@
+---
+title: "OpenAI SDK"
+description: "Use the official OpenAI Python or TypeScript SDK with OpenCompress."
+---
+
+OpenCompress is fully compatible with the OpenAI SDK. Change `base_url` and `api_key` — everything else stays the same.
+
+## Python
+
+```bash
+pip install openai
+```
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+)
+
+# Non-streaming
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "You are a senior software engineer."},
+        {"role": "user", "content": "Review this code and suggest improvements..."},
+    ],
+)
+
+print(response.choices[0].message.content)
+print(f"Tokens used: {response.usage.total_tokens}")
+```
+
+## TypeScript / Node.js
+
+```bash
+npm install openai
+```
+
+```typescript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://www.opencompress.ai/api/v1",
+  apiKey: "sk-occ-your-key-here",
+});
+
+const response = await client.chat.completions.create({
+  model: "claude-sonnet-4-6",
+  messages: [
+    { role: "system", content: "You are a senior software engineer." },
+    { role: "user", content: "Review this code and suggest improvements..." },
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+
+## Streaming
+
+<CodeGroup>
+
+```python Python
+stream = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Write a haiku about compression."}],
+    stream=True,
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="")
+```
+
+```typescript TypeScript
+const stream = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: "Write a haiku about compression." }],
+  stream: true,
+});
+
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) process.stdout.write(content);
+}
+```
+
+</CodeGroup>
+
+<Note>
+  Streaming works identically to the OpenAI API. Compression happens before the stream starts — there is no additional latency during token generation.
+</Note>
+
+## Switching between models
+
+You can use any supported model by changing the `model` parameter. No other code changes needed.
+
+```python
+# OpenAI
+client.chat.completions.create(model="gpt-4o", ...)
+
+# Anthropic
+client.chat.completions.create(model="claude-sonnet-4-6", ...)
+
+# Google
+client.chat.completions.create(model="gemini-2.5-pro", ...)
+
+# Meta (via OpenRouter)
+client.chat.completions.create(model="meta-llama/llama-4-maverick", ...)
+```

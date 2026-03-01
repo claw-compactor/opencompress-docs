@@ -1,0 +1,73 @@
+---
+title: "API Overview"
+description: "OpenAI-compatible REST API with transparent prompt compression."
+---
+
+## Base URL
+
+```
+https://www.opencompress.ai/api/v1
+```
+
+## Authentication
+
+All requests require a Bearer token:
+
+```
+Authorization: Bearer sk-occ-your-key-here
+```
+
+Get your API key from the [dashboard](https://www.opencompress.ai/dashboard).
+
+## Compatibility
+
+The OpenCompress API is **fully compatible** with the [OpenAI Chat Completions API](https://platform.openai.com/docs/api-reference/chat). Any SDK, library, or tool that works with OpenAI will work with OpenCompress by changing the base URL.
+
+## Available endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/v1/chat/completions` | Create a chat completion (with compression) |
+
+## Request format
+
+```json
+{
+  "model": "gpt-4o-mini",
+  "messages": [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Your prompt here."}
+  ],
+  "stream": false
+}
+```
+
+## Response format
+
+```json
+{
+  "id": "gen-abc123",
+  "object": "chat.completion",
+  "created": 1772341560,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Response content here."
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18,
+    "completion_tokens": 145,
+    "total_tokens": 163
+  }
+}
+```
+
+<Note>
+  Token counts in `usage` reflect the **compressed** token counts — what the model actually processed. This is what you're billed for.
+</Note>

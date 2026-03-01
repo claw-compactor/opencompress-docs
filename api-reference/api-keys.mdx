@@ -1,0 +1,80 @@
+---
+title: "API Key Management"
+description: "Create, list, and revoke API keys programmatically."
+---
+
+## Dashboard
+
+The easiest way to manage API keys is through the [dashboard](https://www.opencompress.ai/dashboard). You can create, view, and revoke keys with a single click.
+
+## REST API
+
+API keys can also be managed via REST endpoints. These endpoints require Clerk session authentication (not API key auth).
+
+### List keys
+
+```
+GET /api/keys
+```
+
+Returns all API keys for the authenticated user.
+
+```json
+[
+  {
+    "id": "clx123...",
+    "name": "Production",
+    "keyPrefix": "sk-occ-dUioZ7ag",
+    "mode": "router",
+    "isActive": true,
+    "lastUsedAt": "2026-02-28T10:30:00Z",
+    "createdAt": "2026-02-27T08:00:00Z"
+  }
+]
+```
+
+### Create key
+
+```
+POST /api/keys
+```
+
+```json
+{
+  "name": "Production",
+  "mode": "router"
+}
+```
+
+For BYOK mode:
+
+```json
+{
+  "name": "My OpenAI Key",
+  "mode": "byok",
+  "upstreamBaseUrl": "https://api.openai.com/v1",
+  "upstreamApiKey": "sk-..."
+}
+```
+
+**Response** includes the full key (shown only once):
+
+```json
+{
+  "id": "clx456...",
+  "fullKey": "sk-occ-abc123def456...",
+  "keyPrefix": "sk-occ-abc123de"
+}
+```
+
+<Warning>
+  The `fullKey` is returned only in the create response. Store it immediately — you cannot retrieve it later.
+</Warning>
+
+### Revoke key
+
+```
+DELETE /api/keys/:id
+```
+
+Soft-deletes the key. It becomes inactive immediately and can no longer authenticate requests.

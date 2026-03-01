@@ -1,0 +1,63 @@
+---
+title: "Rate Limits"
+description: "API rate limits and how to handle them."
+---
+
+## Default limits
+
+| Plan | Requests per minute | Concurrent requests |
+|---|---|---|
+| Free tier | 60 | 10 |
+
+Rate limits are applied per API key. If you need higher limits, contact us.
+
+## Rate limit headers
+
+When you approach or exceed limits, responses include:
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | Maximum requests per minute |
+| `X-RateLimit-Remaining` | Remaining requests in current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+
+## Handling rate limits
+
+When rate limited, you'll receive a `429` status code:
+
+```json
+{
+  "error": {
+    "message": "Rate limit exceeded",
+    "type": "rate_limit_error"
+  }
+}
+```
+
+### Recommended retry strategy
+
+```python
+import time
+from openai import OpenAI, RateLimitError
+
+client = OpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+)
+
+def call_with_retry(messages, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages,
+            )
+        except RateLimitError:
+            wait = 2 ** attempt  # exponential backoff
+            time.sleep(wait)
+    raise Exception("Max retries exceeded")
+```
+
+<Tip>
+  The OpenAI SDK has built-in retry logic. By default, it retries rate-limited requests with exponential backoff.
+</Tip>

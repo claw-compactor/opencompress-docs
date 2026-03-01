@@ -1,0 +1,83 @@
+---
+title: "Python (requests)"
+description: "Call the OpenCompress API directly with Python requests."
+---
+
+If you prefer not to use the OpenAI SDK, you can call the API directly.
+
+## Basic usage
+
+```python
+import requests
+
+response = requests.post(
+    "https://www.opencompress.ai/api/v1/chat/completions",
+    headers={
+        "Authorization": "Bearer sk-occ-your-key-here",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "gpt-4o-mini",
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "What is prompt compression?"},
+        ],
+    },
+)
+
+data = response.json()
+print(data["choices"][0]["message"]["content"])
+```
+
+## Streaming with requests
+
+```python
+import requests
+import json
+
+response = requests.post(
+    "https://www.opencompress.ai/api/v1/chat/completions",
+    headers={
+        "Authorization": "Bearer sk-occ-your-key-here",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "gpt-4o",
+        "messages": [{"role": "user", "content": "Explain black holes."}],
+        "stream": True,
+    },
+    stream=True,
+)
+
+for line in response.iter_lines():
+    if line:
+        text = line.decode("utf-8")
+        if text.startswith("data: ") and text != "data: [DONE]":
+            chunk = json.loads(text[6:])
+            content = chunk["choices"][0].get("delta", {}).get("content", "")
+            if content:
+                print(content, end="", flush=True)
+```
+
+## Async with httpx
+
+```python
+import httpx
+
+async def compress_and_call():
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://www.opencompress.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": "Bearer sk-occ-your-key-here",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": "gpt-4o-mini",
+                "messages": [
+                    {"role": "user", "content": "Summarize the latest AI news."},
+                ],
+            },
+        )
+        return response.json()
+```

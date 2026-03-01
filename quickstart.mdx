@@ -1,0 +1,150 @@
+---
+title: "Quick Start"
+description: "Start compressing LLM calls in under 2 minutes. Two lines of code."
+---
+
+## Get your API key
+
+<Steps>
+  <Step title="Create an account">
+    Sign up at [opencompress.ai/dashboard](https://www.opencompress.ai/dashboard).
+  </Step>
+  <Step title="Add funds">
+    Deposit credits via Stripe. Start with $10 to test.
+  </Step>
+  <Step title="Generate an API key">
+    Go to the API Keys section and create a new key. Copy it — it's shown only once.
+  </Step>
+</Steps>
+
+Your API key starts with `sk-occ-` and works like any other LLM API key.
+
+## Integration
+
+OpenCompress is a **drop-in replacement** for any OpenAI-compatible endpoint. Change two values:
+
+| Setting | Before | After |
+|---|---|---|
+| Base URL | `https://api.openai.com/v1` | `https://www.opencompress.ai/api/v1` |
+| API Key | `sk-...` (OpenAI) | `sk-occ-...` (OpenCompress) |
+
+Everything else — model names, message format, streaming, tool calls — stays identical.
+
+---
+
+## Code examples
+
+<CodeGroup>
+
+```python Python (OpenAI SDK)
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Explain quantum computing in simple terms."},
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+```typescript TypeScript (OpenAI SDK)
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://www.opencompress.ai/api/v1",
+  apiKey: "sk-occ-your-key-here",
+});
+
+const response = await client.chat.completions.create({
+  model: "gpt-4o-mini",
+  messages: [
+    { role: "system", content: "You are a helpful assistant." },
+    { role: "user", content: "Explain quantum computing in simple terms." },
+  ],
+});
+
+console.log(response.choices[0].message.content);
+```
+
+```bash cURL
+curl https://www.opencompress.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer sk-occ-your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "Explain quantum computing in simple terms."}
+    ]
+  }'
+```
+
+</CodeGroup>
+
+<Note>
+  Your prompts are compressed transparently before reaching the model. The response you receive is identical in format to a direct OpenAI API call.
+</Note>
+
+## What happens behind the scenes
+
+```
+Your App                    OpenCompress                     LLM Provider
+   │                            │                                │
+   │─── POST /chat/completions ─│                                │
+   │    (original prompt)       │                                │
+   │                            │── compress prompt ──┐          │
+   │                            │                     │          │
+   │                            │◄─ compressed ───────┘          │
+   │                            │                                │
+   │                            │─── forward compressed ────────►│
+   │                            │                                │
+   │                            │◄── response ──────────────────│
+   │◄── response ───────────────│                                │
+   │                            │                                │
+   │                            │── calculate savings            │
+   │                            │── deduct balance               │
+```
+
+## Supported models
+
+OpenCompress works with any model available on OpenRouter:
+
+<CardGroup cols={3}>
+  <Card title="OpenAI" icon="bolt">
+    GPT-4o, GPT-4o-mini, GPT-4.1, GPT-4.1-mini, GPT-4.1-nano
+  </Card>
+  <Card title="Anthropic" icon="message">
+    Claude Opus 4.6, Claude Sonnet 4.6, Claude Haiku 4.5
+  </Card>
+  <Card title="Google" icon="wand-magic-sparkles">
+    Gemini 2.5 Pro, Gemini 2.5 Flash
+  </Card>
+  <Card title="Meta" icon="meta">
+    Llama 4 Maverick, Llama 4 Scout
+  </Card>
+  <Card title="DeepSeek" icon="magnifying-glass">
+    DeepSeek V3, DeepSeek R1
+  </Card>
+  <Card title="BYOK" icon="key">
+    Use your own API key with any provider
+  </Card>
+</CardGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="How It Works" icon="gear" href="/how-it-works">
+    Understand the compression pipeline
+  </Card>
+  <Card title="BYOK Mode" icon="key" href="/features/byok-mode">
+    Use your own LLM API key
+  </Card>
+</CardGroup>

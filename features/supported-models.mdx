@@ -1,0 +1,60 @@
+---
+title: "Supported Models"
+description: "All LLM models available through OpenCompress."
+---
+
+## Router mode
+
+In router mode, OpenCompress routes your request through OpenRouter, giving you access to hundreds of models. Here are the most popular:
+
+### OpenAI
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) |
+|---|---|---|
+| `gpt-4o` | $2.50 | $10.00 |
+| `gpt-4o-mini` | $0.15 | $0.60 |
+| `gpt-4-turbo` | $10.00 | $30.00 |
+| `gpt-4.1` | $2.00 | $8.00 |
+| `gpt-4.1-mini` | $0.40 | $1.60 |
+| `gpt-4.1-nano` | $0.10 | $0.40 |
+
+### Anthropic
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) |
+|---|---|---|
+| `claude-opus-4-6` | $15.00 | $75.00 |
+| `claude-sonnet-4-6` | $3.00 | $15.00 |
+| `claude-haiku-4-5-20251001` | $0.80 | $4.00 |
+
+### Google
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) |
+|---|---|---|
+| `gemini-2.5-pro` | $1.25 | $10.00 |
+| `gemini-2.5-flash` | $0.15 | $0.60 |
+
+### Meta
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) |
+|---|---|---|
+| `meta-llama/llama-4-maverick` | $0.20 | $0.60 |
+| `meta-llama/llama-4-scout` | $0.15 | $0.40 |
+
+### DeepSeek
+
+| Model | Input (per 1M tokens) | Output (per 1M tokens) |
+|---|---|---|
+| `deepseek/deepseek-chat-v3-0324` | $0.50 | $1.50 |
+| `deepseek/deepseek-r1` | $0.50 | $2.00 |
+
+<Note>
+  Prices shown are the base LLM cost before compression savings. With OpenCompress, your effective cost is lower because fewer tokens are sent.
+</Note>
+
+## BYOK mode
+
+In BYOK mode, you can use **any model from any provider**. Just provide your own API key and base URL. See [BYOK Mode](/features/byok-mode) for details.
+
+## Model not listed?
+
+If a model is available on OpenRouter, it works with OpenCompress. Use the exact model identifier from OpenRouter's model list.

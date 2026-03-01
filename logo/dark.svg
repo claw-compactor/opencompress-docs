@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none">
+  <rect x="2" y="8" width="24" height="24" rx="4" fill="#DC2626"/>
+  <path d="M10 16l4 4 4-4M10 22l4 4 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="34" y="27" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="600" fill="#FAFAFA">OpenCompress</text>
+</svg>

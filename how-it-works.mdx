@@ -1,0 +1,54 @@
+---
+title: "How It Works"
+description: "Five compression layers that compound to reduce token usage by 30-40%."
+---
+
+## The compression pipeline
+
+OpenCompress applies a multi-layer compression pipeline to your input prompts. Each layer targets a different source of token waste, and they compound — the output of one feeds into the next.
+
+```
+Raw Prompt → Input Pruning → Dictionary Aliasing → Compressed Prompt → LLM
+```
+
+## Layer 1: Input Pruning
+
+**What it does:** Removes tokens the model doesn't need to read.
+
+A distilled classifier trained on 105K+ agent conversation samples scores each token by semantic importance. Low-importance tokens — filler words, redundant connectors, verbose formatting — are removed while preserving meaning.
+
+| Metric | Value |
+|---|---|
+| Token reduction | 40-60% |
+| Quality retention | 95%+ cosine similarity |
+| Speed | 4-12x faster than LLMLingua-2 |
+
+## Layer 2: Dictionary Aliasing
+
+**What it does:** Replaces repeated phrases with compact aliases.
+
+Common multi-token phrases are mapped to short aliases (e.g., `§A1`). A dictionary header is prepended to the prompt so the model can decode them. This is especially effective for:
+
+- System prompts with repeated instructions
+- RAG contexts with recurring entity names
+- Tool call schemas with verbose type definitions
+
+## Layer 3: Output Estimation
+
+**What it does:** Estimates output savings from compressed input.
+
+When input is compressed, the model's output also tends to be shorter — it mirrors the density of the input. We estimate output savings proportional to input compression:
+
+```
+output_savings_rate = input_compression_rate × 0.5
+```
+
+This means if we compress your input by 40%, we estimate your output is ~20% shorter than it would have been.
+
+## Quality guarantee
+
+Every compression is validated by cosine similarity between the original and compressed prompts. If compression would degrade quality below threshold, the original prompt is sent unmodified and you pay standard rates with no fee.
+
+<Tip>
+  Try the [Playground](https://www.opencompress.ai/playground) to see compression applied to your actual prompts in real time, with side-by-side quality comparison.
+</Tip>

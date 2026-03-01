@@ -1,0 +1,67 @@
+---
+title: "Errors"
+description: "HTTP status codes and error response format."
+---
+
+## Error format
+
+All errors follow this structure:
+
+```json
+{
+  "error": {
+    "message": "Human-readable error description",
+    "type": "error_type"
+  }
+}
+```
+
+## Status codes
+
+| Code | Type | Description |
+|---|---|---|
+| `401` | `auth_error` | Invalid or missing API key |
+| `402` | `billing_error` | Insufficient balance |
+| `429` | `rate_limit_error` | Too many requests |
+| `502` | `upstream_error` | LLM provider returned an error |
+| `500` | `internal_error` | Server error |
+
+## Common errors and solutions
+
+### 401 — Invalid API key
+
+```json
+{"error": {"message": "Invalid API key", "type": "auth_error"}}
+```
+
+**Solutions:**
+- Check that your key starts with `sk-occ-`
+- Ensure the `Authorization` header format is `Bearer sk-occ-...`
+- Verify the key hasn't been revoked in your dashboard
+
+### 402 — Insufficient balance
+
+```json
+{"error": {"message": "Insufficient balance", "type": "billing_error"}}
+```
+
+**Solution:** Add funds in the [dashboard](https://www.opencompress.ai/dashboard).
+
+### 429 — Rate limit exceeded
+
+```json
+{"error": {"message": "Rate limit exceeded", "type": "rate_limit_error"}}
+```
+
+**Solution:** Wait and retry with exponential backoff. Default limit is 60 requests/minute per key.
+
+### 502 — Upstream error
+
+```json
+{"error": {"message": "Upstream error: ...", "type": "upstream_error"}}
+```
+
+**Solutions:**
+- Check if the model name is correct
+- The LLM provider may be experiencing downtime
+- For BYOK: verify your upstream API key is valid

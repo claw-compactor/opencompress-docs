@@ -1,0 +1,79 @@
+---
+title: "cURL"
+description: "Test the OpenCompress API from your terminal."
+---
+
+## Basic request
+
+```bash
+curl https://www.opencompress.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer sk-occ-your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "What is prompt compression and why does it matter?"}
+    ]
+  }'
+```
+
+## Streaming
+
+```bash
+curl https://www.opencompress.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer sk-occ-your-key-here" \
+  -H "Content-Type: application/json" \
+  -N \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {"role": "user", "content": "Write a short story about AI."}
+    ],
+    "stream": true
+  }'
+```
+
+## Specify a different model
+
+```bash
+curl https://www.opencompress.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer sk-occ-your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {"role": "user", "content": "Compare REST and GraphQL."}
+    ]
+  }'
+```
+
+## Response format
+
+```json
+{
+  "id": "gen-abc123",
+  "object": "chat.completion",
+  "created": 1772341560,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Prompt compression is..."
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 18,
+    "completion_tokens": 145,
+    "total_tokens": 163
+  }
+}
+```
+
+<Note>
+  The response format is identical to the OpenAI Chat Completions API. Any tool that parses OpenAI responses will work unchanged.
+</Note>

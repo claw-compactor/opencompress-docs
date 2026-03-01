@@ -1,0 +1,47 @@
+---
+title: "Models"
+description: "Model identifiers and pricing for all supported models."
+---
+
+## Model identifiers
+
+Use these exact strings as the `model` parameter in your API requests.
+
+### Tier 1: Flagship
+
+| Model | Provider | Input / 1M | Output / 1M | Best for |
+|---|---|---|---|---|
+| `gpt-4o` | OpenAI | $2.50 | $10.00 | General purpose |
+| `claude-sonnet-4-6` | Anthropic | $3.00 | $15.00 | Coding, analysis |
+| `gemini-2.5-pro` | Google | $1.25 | $10.00 | Long context |
+| `gpt-4.1` | OpenAI | $2.00 | $8.00 | Coding, instructions |
+
+### Tier 2: Cost-efficient
+
+| Model | Provider | Input / 1M | Output / 1M | Best for |
+|---|---|---|---|---|
+| `gpt-4o-mini` | OpenAI | $0.15 | $0.60 | High volume |
+| `gpt-4.1-mini` | OpenAI | $0.40 | $1.60 | Balanced |
+| `claude-haiku-4-5-20251001` | Anthropic | $0.80 | $4.00 | Fast tasks |
+| `gemini-2.5-flash` | Google | $0.15 | $0.60 | Speed |
+
+### Tier 3: Budget
+
+| Model | Provider | Input / 1M | Output / 1M | Best for |
+|---|---|---|---|---|
+| `gpt-4.1-nano` | OpenAI | $0.10 | $0.40 | Classification |
+| `meta-llama/llama-4-scout` | Meta | $0.15 | $0.40 | Open source |
+| `meta-llama/llama-4-maverick` | Meta | $0.20 | $0.60 | Open source |
+
+### Tier 4: Reasoning
+
+| Model | Provider | Input / 1M | Output / 1M | Best for |
+|---|---|---|---|---|
+| `claude-opus-4-6` | Anthropic | $15.00 | $75.00 | Complex reasoning |
+| `gpt-4-turbo` | OpenAI | $10.00 | $30.00 | Legacy |
+| `deepseek/deepseek-r1` | DeepSeek | $0.50 | $2.00 | Chain-of-thought |
+| `deepseek/deepseek-chat-v3-0324` | DeepSeek | $0.50 | $1.50 | General |
+
+## Unknown models
+
+If you use a model not in our pricing table, we apply a default rate of $1.00/1M input and $3.00/1M output for savings calculations. The request still works — it's routed through OpenRouter normally.

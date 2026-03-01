@@ -1,0 +1,61 @@
+---
+title: "BYOK Mode"
+description: "Bring Your Own Key — use your existing LLM API key with OpenCompress."
+---
+
+## What is BYOK?
+
+**Bring Your Own Key (BYOK)** mode lets you use your existing API key from any LLM provider (OpenAI, Anthropic, etc.) while still getting OpenCompress's compression benefits.
+
+## How it works
+
+```
+Your App → OpenCompress (compress) → Your Provider (with your key) → Response
+```
+
+In BYOK mode:
+1. Your prompts are compressed by OpenCompress
+2. The compressed request is forwarded to **your provider** using **your API key**
+3. You pay your provider directly at their rates
+4. OpenCompress charges **only 20% of the savings** as a fee
+
+## Setup
+
+When creating an API key in the [dashboard](https://www.opencompress.ai/dashboard), select **BYOK mode** and provide:
+
+| Field | Description | Example |
+|---|---|---|
+| Upstream Base URL | Your provider's API base URL | `https://api.openai.com/v1` |
+| Upstream API Key | Your provider's API key | `sk-...` |
+
+## Pricing comparison
+
+| | Router Mode | BYOK Mode |
+|---|---|---|
+| Who pays the LLM? | OpenCompress (via OpenRouter) | You (your provider) |
+| LLM cost | Included in your charge | You pay directly |
+| Compression fee | 20% of savings | 20% of savings |
+| Total you pay us | LLM cost + fee | Fee only |
+
+<Tip>
+  BYOK is ideal if you already have negotiated rates, enterprise agreements, or credits with an LLM provider. You get compression savings on top of your existing deal.
+</Tip>
+
+## Supported providers
+
+Any OpenAI-compatible API endpoint works with BYOK:
+
+| Provider | Base URL |
+|---|---|
+| OpenAI | `https://api.openai.com/v1` |
+| Anthropic (via proxy) | Anthropic's OpenAI-compatible endpoint |
+| Azure OpenAI | `https://your-resource.openai.azure.com/openai/deployments/your-model/v1` |
+| Together AI | `https://api.together.xyz/v1` |
+| Groq | `https://api.groq.com/openai/v1` |
+| Any OpenAI-compatible | Your custom base URL |
+
+## Security
+
+- Your upstream API key is stored encrypted and only used for forwarding requests
+- OpenCompress never logs your upstream key in plaintext
+- You can revoke your OpenCompress key at any time to stop forwarding

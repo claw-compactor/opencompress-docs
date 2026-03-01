@@ -1,0 +1,68 @@
+---
+title: "Compression Engine"
+description: "Technical deep-dive into the OpenCompress compression pipeline."
+---
+
+## Architecture
+
+The compression engine runs a two-stage pipeline on every user message in your request:
+
+```
+User Message → Stage 1: Dictionary Aliasing → Stage 2: Semantic Pruning → Compressed Message
+```
+
+System messages and assistant messages are passed through unmodified.
+
+## Stage 1: Dictionary Aliasing
+
+Repeated multi-token phrases are identified and replaced with compact aliases:
+
+```
+Before: "The retrieval-augmented generation system uses retrieval-augmented generation to..."
+After:  "§A=retrieval-augmented generation. The §A system uses §A to..."
+```
+
+**When it helps most:**
+- System prompts with repeated terminology
+- RAG contexts with recurring entity names
+- Tool schemas with verbose type annotations
+- Multi-turn conversations with repeated context
+
+## Stage 2: Semantic Pruning
+
+A distilled classifier (trained on 105K+ real agent conversations) scores each token by semantic importance. Tokens below the threshold are removed:
+
+```
+Before: "Could you please provide me with a detailed and comprehensive explanation of..."
+After:  "Explain..."
+```
+
+The classifier preserves:
+- Named entities and technical terms
+- Logical connectors that affect meaning
+- Numerical values and specific references
+- Code and structured data
+
+**Training data:** 105K agent conversations across coding, analysis, writing, and tool-use domains. Quality is validated by cosine similarity between original and compressed embeddings.
+
+## Compression rates by content type
+
+| Content Type | Typical Compression | Notes |
+|---|---|---|
+| Natural language instructions | 40-55% | Highest savings |
+| RAG / retrieved documents | 35-50% | Good savings, preserves facts |
+| Conversation history | 30-45% | Repeated patterns compress well |
+| Code blocks | 10-20% | Minimal compression (already dense) |
+| JSON / structured data | 15-25% | Some key name shortening |
+
+## Quality validation
+
+Every compression is scored:
+
+- **Cosine similarity** between original and compressed embeddings
+- If similarity drops below 0.85, the original is sent unmodified
+- Quality scores are logged and visible in your dashboard
+
+<Note>
+  Compression never modifies the model's response. We only compress your input — the model generates its response normally from the compressed prompt.
+</Note>

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "quill",
+  "name": "OpenCompress",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/favicon.ico",
+  "colors": {
+    "primary": "#DC2626",
+    "light": "#EF4444",
+    "dark": "#B91C1C",
+    "background": {
+      "dark": "#0A0A0A"
+    }
+  },
+  "topbar": {
+    "style": "default"
+  },
+  "tabs": [
+    {
+      "tab": "Documentation",
+      "groups": [
+        {
+          "group": "Getting Started",
+          "pages": [
+            "introduction",
+            "quickstart",
+            "how-it-works"
+          ]
+        },
+        {
+          "group": "Integration",
+          "pages": [
+            "integration/openai-sdk",
+            "integration/python-sdk",
+            "integration/curl",
+            "integration/langchain",
+            "integration/streaming"
+          ]
+        },
+        {
+          "group": "Features",
+          "pages": [
+            "features/compression-engine",
+            "features/byok-mode",
+            "features/supported-models",
+            "features/rate-limits"
+          ]
+        },
+        {
+          "group": "Billing",
+          "pages": [
+            "billing/pricing",
+            "billing/how-billing-works",
+            "billing/manage-balance"
+          ]
+        }
+      ]
+    },
+    {
+      "tab": "API Reference",
+      "groups": [
+        {
+          "group": "Endpoints",
+          "pages": [
+            "api-reference/overview",
+            "api-reference/chat-completions",
+            "api-reference/models",
+            "api-reference/errors"
+          ]
+        },
+        {
+          "group": "Authentication",
+          "pages": [
+            "api-reference/authentication",
+            "api-reference/api-keys"
+          ]
+        }
+      ]
+    }
+  ],
+  "navbar": [
+    {
+      "label": "Dashboard",
+      "href": "https://www.opencompress.ai/dashboard"
+    },
+    {
+      "label": "Playground",
+      "href": "https://www.opencompress.ai/playground"
+    }
+  ],
+  "footer": {
+    "socials": {
+      "github": "https://github.com/claw-compactor/opencompress",
+      "x": "https://x.com/opencompress"
+    }
+  },
+  "analytics": {},
+  "feedback": {
+    "thumbsRating": true
+  },
+  "search": {
+    "prompt": "Search docs..."
+  }
+}

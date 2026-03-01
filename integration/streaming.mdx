@@ -1,0 +1,90 @@
+---
+title: "Streaming"
+description: "Real-time streaming responses with server-sent events."
+---
+
+## How streaming works
+
+OpenCompress supports streaming via server-sent events (SSE), identical to the OpenAI API. Set `"stream": true` in your request body.
+
+**Important:** Compression happens _before_ the stream starts. The compression step adds a small fixed latency (~100-300ms), but once streaming begins, tokens arrive at the same speed as a direct API call.
+
+```
+Compression (100-300ms) → Stream starts → Tokens arrive at full speed
+```
+
+## Request
+
+```bash
+curl https://www.opencompress.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer sk-occ-your-key-here" \
+  -H "Content-Type: application/json" \
+  -N \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [{"role": "user", "content": "Tell me a story."}],
+    "stream": true
+  }'
+```
+
+## Response format
+
+Each SSE event contains a JSON chunk:
+
+```
+data: {"id":"gen-abc","object":"chat.completion.chunk","created":1772341560,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"Once"},"finish_reason":null}]}
+
+data: {"id":"gen-abc","object":"chat.completion.chunk","created":1772341560,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":" upon"},"finish_reason":null}]}
+
+data: {"id":"gen-abc","object":"chat.completion.chunk","created":1772341560,"model":"gpt-4o","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":12,"completion_tokens":85,"total_tokens":97}}
+
+data: [DONE]
+```
+
+The final chunk includes `usage` data with token counts. Billing is calculated after the stream completes.
+
+## SDK examples
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+)
+
+stream = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Tell me a story."}],
+    stream=True,
+)
+
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="", flush=True)
+```
+
+```typescript TypeScript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://www.opencompress.ai/api/v1",
+  apiKey: "sk-occ-your-key-here",
+});
+
+const stream = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [{ role: "user", content: "Tell me a story." }],
+  stream: true,
+});
+
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) process.stdout.write(content);
+}
+```
+
+</CodeGroup>

@@ -1,0 +1,54 @@
+---
+title: "How Billing Works"
+description: "Per-request billing with full transparency."
+---
+
+## Per-request billing
+
+Every API call is billed individually. After each request completes, we:
+
+1. **Measure** the original and compressed token counts
+2. **Calculate** the cost difference (savings)
+3. **Charge** the actual LLM cost + 20% of savings (router mode) or just the 20% fee (BYOK)
+4. **Deduct** from your prepaid balance
+5. **Log** the full breakdown in your dashboard
+
+## Billing formula
+
+```
+original_cost = original_input_tokens × input_price + estimated_original_output × output_price
+actual_cost   = compressed_input_tokens × input_price + actual_output_tokens × output_price
+savings       = max(0, original_cost - actual_cost)
+fee           = savings × 0.20
+
+# Router mode
+total_charged = actual_cost + fee
+
+# BYOK mode
+total_charged = fee
+```
+
+## What you see in the dashboard
+
+Each request in your usage history shows:
+
+| Field | Description |
+|---|---|
+| Model | The model used |
+| Input tokens | Original → compressed |
+| Output tokens | Actual tokens generated |
+| Compression rate | % of input tokens saved |
+| Savings | Dollar amount saved |
+| Charged | Amount deducted from balance |
+
+## Balance protection
+
+- If your balance reaches $0, API requests return `402 Insufficient balance`
+- We never charge more than your available balance
+- No surprise charges — you control how much you deposit
+
+## Monitoring usage
+
+Track your spending in real time:
+- **Dashboard:** [opencompress.ai/dashboard](https://www.opencompress.ai/dashboard) shows balance, monthly stats, and per-request logs
+- **API:** Usage data is included in the `usage` field of every response

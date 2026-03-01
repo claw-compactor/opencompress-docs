@@ -1,0 +1,145 @@
+---
+title: "Chat Completions"
+description: "POST /v1/chat/completions — Create a compressed chat completion."
+---
+
+## Endpoint
+
+```
+POST https://www.opencompress.ai/api/v1/chat/completions
+```
+
+## Headers
+
+| Header | Required | Description |
+|---|---|---|
+| `Authorization` | Yes | `Bearer sk-occ-your-key-here` |
+| `Content-Type` | Yes | `application/json` |
+
+## Request body
+
+<ParamField body="model" type="string" required>
+  Model identifier. See [Supported Models](/features/supported-models) for the full list.
+
+  Examples: `gpt-4o`, `claude-sonnet-4-6`, `gemini-2.5-pro`
+</ParamField>
+
+<ParamField body="messages" type="array" required>
+  Array of message objects. Each message has a `role` and `content`.
+
+  Supported roles: `system`, `user`, `assistant`
+</ParamField>
+
+<ParamField body="stream" type="boolean" default="false">
+  If `true`, returns a stream of server-sent events.
+</ParamField>
+
+<ParamField body="temperature" type="number">
+  Sampling temperature (0-2). Passed through to the model.
+</ParamField>
+
+<ParamField body="max_tokens" type="integer">
+  Maximum tokens to generate. Passed through to the model.
+</ParamField>
+
+<ParamField body="top_p" type="number">
+  Nucleus sampling parameter. Passed through to the model.
+</ParamField>
+
+<ParamField body="stop" type="string | array">
+  Stop sequences. Passed through to the model.
+</ParamField>
+
+All standard OpenAI parameters (`frequency_penalty`, `presence_penalty`, `logprobs`, `tools`, `tool_choice`, etc.) are passed through to the upstream model.
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for this completion.
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Always `"chat.completion"`.
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Unix timestamp of when the completion was created.
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  The model used, matching your request.
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  Array of completion choices.
+
+  <Expandable title="Choice object">
+    <ResponseField name="index" type="integer">
+      Index of this choice.
+    </ResponseField>
+    <ResponseField name="message" type="object">
+      The assistant's message with `role` and `content`.
+    </ResponseField>
+    <ResponseField name="finish_reason" type="string">
+      Why generation stopped: `"stop"`, `"length"`, `"tool_calls"`.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Token usage statistics.
+
+  <Expandable title="Usage object">
+    <ResponseField name="prompt_tokens" type="integer">
+      Number of tokens in the compressed prompt.
+    </ResponseField>
+    <ResponseField name="completion_tokens" type="integer">
+      Number of tokens in the response.
+    </ResponseField>
+    <ResponseField name="total_tokens" type="integer">
+      Total tokens (prompt + completion).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://www.opencompress.ai/api/v1",
+    api_key="sk-occ-your-key-here",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "You are a concise technical writer."},
+        {"role": "user", "content": "Explain how JWT authentication works."},
+    ],
+    temperature=0.7,
+    max_tokens=500,
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
+curl https://www.opencompress.ai/api/v1/chat/completions \
+  -H "Authorization: Bearer sk-occ-your-key-here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {"role": "system", "content": "You are a concise technical writer."},
+      {"role": "user", "content": "Explain how JWT authentication works."}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 500
+  }'
+```
+
+</CodeGroup>
