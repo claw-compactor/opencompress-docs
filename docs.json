@@ -10,15 +10,9 @@
   "colors": {
     "primary": "#DC2626",
     "light": "#EF4444",
-    "dark": "#B91C1C",
-    "background": {
-      "dark": "#0A0A0A"
-    }
+    "dark": "#B91C1C"
   },
-  "topbar": {
-    "style": "default"
-  },
-  "tabs": [
+  "navigation": [
     {
       "tab": "Documentation",
       "groups": [
@@ -81,27 +75,25 @@
       ]
     }
   ],
-  "navbar": [
-    {
-      "label": "Dashboard",
-      "href": "https://www.opencompress.ai/dashboard"
-    },
-    {
-      "label": "Playground",
-      "href": "https://www.opencompress.ai/playground"
-    }
-  ],
+  "navbar": {
+    "links": [
+      {
+        "label": "Dashboard",
+        "href": "https://www.opencompress.ai/dashboard"
+      },
+      {
+        "label": "Playground",
+        "href": "https://www.opencompress.ai/playground"
+      }
+    ]
+  },
   "footer": {
     "socials": {
       "github": "https://github.com/claw-compactor/opencompress",
       "x": "https://x.com/opencompress"
     }
   },
-  "analytics": {},
   "feedback": {
     "thumbsRating": true
-  },
-  "search": {
-    "prompt": "Search docs..."
   }
 }
